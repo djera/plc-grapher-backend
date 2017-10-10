@@ -65,5 +65,6 @@ class CompiledData(views.APIView):
                         value = b[v.startByte] & pow(2, v.startBit)
                         data[v.name] = value
 
+            data["timestamp"] = l.added_at
             dataArr.append(data)
         return Response(dataArr)
