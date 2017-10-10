@@ -4,7 +4,7 @@ from rest_framework_jwt.views import verify_jwt_token, refresh_jwt_token
 from rest_framework.routers import DefaultRouter
 from .views import AllUsersViewset
 from django.conf.urls import include, url
-
+from rest_framework.authtoken import views as tokenviews
 
 User = get_user_model()
 
@@ -22,7 +22,7 @@ base_urlpatterns = (
     url(r'^password/reset/confirm/$',
         views.PasswordResetConfirmView.as_view(),
         name='password_reset_confirm'),
-    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^login/$', tokenviews.obtain_auth_token, name='login'),
     url(r'^$',
         views.RootView.as_view(
             urls_extra_mapping={'login': 'login', 'logout': 'logout'}),

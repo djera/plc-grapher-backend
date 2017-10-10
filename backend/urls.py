@@ -20,5 +20,6 @@ from django.conf.urls import include
 urlpatterns = [
     url(r'^api/v1/auth/', include('authentication.urls')),
     url(r'^api/v1/eventlog/', include('eventlog.urls')),
+    url(r'^api/v1/datalog/', include('data.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'channels',
     'backend',
     'chans',
+    'data',
     'rest_framework',
+    'rest_framework.authtoken',
     'authentication',
     'eventlog'
 ]
@@ -51,9 +53,9 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -83,9 +85,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'noritec',
-        'USER': 'ledinek',
-        'PASSWORD': 'ledinek',
+        'NAME': 'plcgrapher',
+        'USER': 'plcgrapher',
+        'PASSWORD': 'plcgrapher',
         'HOST': '',
         'PORT': '',
     }
@@ -131,8 +133,7 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6,
@@ -186,3 +187,6 @@ JWT_AUTH = {
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+GRAPHER_URL = 'http://localhost:12000'
+GRAPHER_TOKEN = '46cea5cac5068510b2f17b75083799bf42ee8bb6'

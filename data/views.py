@@ -1,10 +1,8 @@
 from rest_framework import viewsets, permissions, views
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from .serializers import EventSerializer
-from .models import Event
-from rest_framework import filters
-from .filters import EventFilter
+from .serializers import HexDataSerializer
+from .models import HexData
 
 class RootView(views.APIView):
     """
@@ -14,7 +12,7 @@ class RootView(views.APIView):
         permissions.AllowAny,
     )
     urls_mapping = {
-        'events': 'events-list',
+        'data': 'data-list',
     }
     urls_extra_mapping = None
 
@@ -34,11 +32,13 @@ class RootView(views.APIView):
         )
 
 
-class EventViewset(viewsets.ModelViewSet):
-    filter_class = EventFilter
+class DataViewset(viewsets.ModelViewSet):
     permission_classes = ( permissions.IsAuthenticated, )
-    serializer_class = EventSerializer
-    queryset = Event.objects.all()
-    filter_backends = (filters.OrderingFilter, filters.DjangoFilterBackend,)
+    serializer_class = HexDataSerializer
+    queryset = HexData.objects.all()
     ordering_fields = ('added_at',)
     ordering = ('-added_at',)
+
+    def perform_create(self, serializer):
+        print("!!!")
+        serializer.save(user=self.request.user)

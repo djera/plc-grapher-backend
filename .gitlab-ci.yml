@@ -1,0 +1,33 @@
+stages:
+  - build_image
+  - deploy
+
+build_image:
+  stage: deploy
+  only:
+    - tags
+  image: docker:latest
+
+  before_script:
+    - docker info
+
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.dac.si
+    - docker build -t registry.gitlab.dac.si/ledinek-klh-zinc/backend:latest .
+    - docker push registry.gitlab.dac.si/ledinek-klh-zinc/backend:latest
+
+deploy:
+  image: deanrock/ansible:2.2
+  stage: deploy
+
+
+  only:
+    - tags
+
+  script:
+    - mkdir ~/.ssh/
+    - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - ssh trinch@vm.dac.si -p20024 docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.dac.si
+    - ssh trinch@vm.dac.si -p20024 /home/trinch/ledinek-klh-zinc/pull.sh

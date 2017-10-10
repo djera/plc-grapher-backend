@@ -1,0 +1,1 @@
+SELECT * FROM backend_outgoingpackage GROUP BY date(timestampFinished), packageThickness, packageWidth;

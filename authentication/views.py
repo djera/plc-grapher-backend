@@ -5,6 +5,7 @@ from rest_framework import (
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework_jwt.views import ObtainJSONWebToken
+from rest_framework.authtoken import views as tokenviews
 from rest_framework.viewsets import ModelViewSet
 from . import serializers, settings, utils, signals
 from .filters import UsersFilter
@@ -43,18 +44,6 @@ class RootView(views.APIView):
                   for key, url_name in self.get_urls_mapping().items()])
         )
 
-
-class LoginView(ObtainJSONWebToken):
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-
-        response = super(LoginView, self).post(request, *args, **kwargs)
-
-        if serializer.is_valid():
-            user = serializer.object.get('user') or request.user
-            signals.user_sign_in.send(
-                sender=self.__class__, user=user, request=self.request)
-        return response
 
 
 class PasswordResetView(utils.ActionViewMixin, generics.GenericAPIView):
