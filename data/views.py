@@ -2,7 +2,8 @@ from rest_framework import viewsets, permissions, views
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from .serializers import HexDataSerializer
-from .models import HexData
+from .models import HexData, VariableConfig, DataModelConfig
+import binascii
 
 class RootView(views.APIView):
     """
@@ -40,5 +41,29 @@ class DataViewset(viewsets.ModelViewSet):
     ordering = ('-added_at',)
 
     def perform_create(self, serializer):
-        print("!!!")
         serializer.save(user=self.request.user)
+
+class CompiledData(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        hex = HexData.objects.filter(user=request.user)
+        config = DataModelConfig.objects.filter(user=request.user).first()
+        variables = VariableConfig.objects.filter(config=config)
+
+        dataArr = []
+        for l in hex:
+            data = {}
+            s = binascii.unhexlify(l.hex_data)
+            b = [ord(x) for x in s]
+            print(b)
+            b_len = len(b)
+            for v in variables:
+                if v.type == VariableConfig.TYPES[0][0]:
+                    if v.startByte < b_len:
+                        print(str(b[v.startByte]) + ' % '  + str(pow(2, v.startBit)))
+                        value = b[v.startByte] & pow(2, v.startBit)
+                        data[v.name] = value
+
+            dataArr.append(data)
+        return Response(dataArr)

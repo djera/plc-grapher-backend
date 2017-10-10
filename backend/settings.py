@@ -188,5 +188,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
-GRAPHER_URL = 'http://localhost:12000'
-GRAPHER_TOKEN = '46cea5cac5068510b2f17b75083799bf42ee8bb6'
+GRAPHER_URL = 'http://djera.eu'
+GRAPHER_TOKEN = '95afe1c0f403004e384b25c6679572690bf99491'
