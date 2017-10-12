@@ -6,7 +6,7 @@ import binascii
 from chans.wssender import graph_update
 
 @receiver(post_save, sender=HexData)
-def send_graph_data(sender, instance, **kwargs):
+def send_graph_data(sender, instance=None, created=False, **kwargs):
     if instance is not None:
 
         config = DataModelConfig.objects.filter(user=instance.user).first()
