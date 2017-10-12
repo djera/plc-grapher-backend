@@ -56,7 +56,6 @@ class CompiledData(views.APIView):
             data = {}
             s = binascii.unhexlify(l.hex_data)
             b = [ord(x) for x in s]
-            print(b)
             b_len = len(b)
             for v in variables:
                 if v.type == VariableConfig.TYPES[0][0]:
