@@ -6,4 +6,4 @@ class DataConfig(AppConfig):
     name = 'data'
 
     def ready(self):
-        from eventlog.receiver import *
+        from data.signals import *
